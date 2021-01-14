@@ -27,7 +27,8 @@ uint32_t random32() {
 
 void random_buffer(uint8_t *buf, size_t len) {
     JNIEnv *env;
-    cachedJVM->AttachCurrentThread(&env, NULL);
+    cachedJVM->GetEnv(( void **)&env, JNI_VERSION_1_2);
+    // cachedJVM->AttachCurrentThread(&env, NULL);
 
     // SecureRandom random = new SecureRandom();
     jclass secureRandomClass = env->FindClass("java/security/SecureRandom");
