@@ -87,9 +87,11 @@ if(${ANDROID})
     target_link_libraries(TrustWalletCore PRIVATE TrezorCrypto protobuf ${log-lib} Boost::boost)
 else()
     message("Configuring standalone")
-    file(GLOB_RECURSE sources src/*.c src/*.cc src/*.cpp src/*.h)
-    add_library(TrustWalletCore ${sources} ${PROTO_SRCS} ${PROTO_HDRS})
-
+    # file(GLOB_RECURSE sources src/*.c src/*.cc src/*.cpp src/*.h)
+    # add_library(TrustWalletCore ${sources} ${PROTO_SRCS} ${PROTO_HDRS})
+    
+    file(GLOB_RECURSE sources src/*.c src/*.cc src/*.cpp src/*.h jni/cpp/*.c jni/cpp/*.cpp jni/cpp/*.h jni/cpp/*.c)
+    add_library(TrustWalletCore SHARED ${sources} ${PROTO_SRCS} ${PROTO_HDRS})
     target_link_libraries(TrustWalletCore PRIVATE TrezorCrypto protobuf Boost::boost)
 endif()
 target_compile_options(TrustWalletCore PRIVATE "-Wall")
@@ -113,9 +115,9 @@ target_include_directories(TrustWalletCore
 )
 
 if(NOT ANDROID AND NOT IOS_PLATFORM)
-    add_subdirectory(tests)
-    add_subdirectory(walletconsole/lib)
-    add_subdirectory(walletconsole)
+    # add_subdirectory(tests)
+    # add_subdirectory(walletconsole/lib)
+    # add_subdirectory(walletconsole)
 endif()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/swift/cpp.xcconfig.in ${CMAKE_CURRENT_SOURCE_DIR}/swift/cpp.xcconfig @ONLY)
