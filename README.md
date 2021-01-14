@@ -38,6 +38,20 @@ For build instructions, see [developer.trustwallet.com/wallet-core/building](htt
 
 If you want to use wallet core in your project follow these instructions.
 
+## Docker
+
+```groovy
+docker build docker/wallet-core --tag wallet-core-dev
+
+docker run -i -t wallet-core-dev /bin/bash
+
+cd wallet-core
+./tools/generate-files
+cmake -H. -Bbuild -DCMAKE_BUILD_TYPE=Debug
+make -Cbuild
+```
+[Docker Repository](https://hub.docker.com/r/trustwallet/wallet-core)
+
 ## Android
 
 Add this dependency to build.gradle:
