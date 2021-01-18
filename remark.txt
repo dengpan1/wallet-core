@@ -1,0 +1,33 @@
+一：修改项：
+    1、/jni/cpp/Random.cpp 30行附近 -> 
+        注释 cachedJVM->AttachCurrentThread(&env, NULL);
+        新增 cachedJVM->GetEnv(( void **)&env, JNI_VERSION_1_2);
+
+    2、/CMakeLists.txt 90行附近 ->
+        注释两行
+        file(GLOB_RECURSE sources src/*.c src/*.cc src/*.cpp src/*.h)
+        add_library(TrustWalletCore ${sources} ${PROTO_SRCS} ${PROTO_HDRS})
+
+        新增两行
+        file(GLOB_RECURSE sources src/*.c src/*.cc src/*.cpp src/*.h jni/cpp/*.c jni/cpp/*.cpp jni/cpp/*.h jni/cpp/*.c)
+        add_library(TrustWalletCore SHARED ${sources} ${PROTO_SRCS} ${PROTO_HDRS})
+
+    3、/CMakeLists.txt 118行附近 ->  
+        注释三行
+        add_subdirectory(tests)
+        add_subdirectory(walletconsole/lib)
+        add_subdirectory(walletconsole)
+
+二：Docker编译：
+    教程：https://developer.trustwallet.com/wallet-core/developing-the-library/building
+    Docker仓库：https://hub.docker.com/r/trustwallet/wallet-core
+    编译步骤：
+        docker build docker/wallet-core --tag wallet-core-dev
+        docker run -i -t wallet-core-dev /bin/bash
+        cd wallet-core
+        ./tools/generate-files
+        cmake -H. -Bbuild -DCMAKE_BUILD_TYPE=Release
+        make -Cbuild
+
+    得到libTrustWalletCore.so文件，java服务器端通过JNI调用，
+    注意：对应java文件使用编译后的文件夹"/wallet-core/jni/java/wallet/core"下面的java代码
